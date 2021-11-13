@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Парсер</title>
+</head>
+
+<body>
+    <a href="\index" >Главная страница</a>
+    <hr>
+    <h2 align="center">Информация о ценах на квартиры в городе Челябинске.</h2>
+    <br>
+
+    Выберите район:
+    <form action="\price_apartments\" method="post">   <!--  завершающий \ - обязателен, если есть  в app.route -->
+        <select name='region' size=”4”>
+            <option value='Калининский'>      Калининский       </option>
+            <option value='Курчатовский'>     Курчатовский      </option>
+            <option value='Ленинский'>        Ленинский         </option>
+            <option value='Металлургический'> Металлургический  </option>
+            <option value='Советский'>        Советский         </option>
+            <option value='Тракторозаводский'>Тракторозаводский </option>
+            <option value='Центральный'>      Центральный       </option>
+        </select>
+
+        <button type="submit" >"Найти"</button>
+    </form>
+
+
+
+</body>
+
+</html>
