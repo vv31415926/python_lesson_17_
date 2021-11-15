@@ -1,9 +1,10 @@
 import requests
 import pprint
 from bs4 import BeautifulSoup
+from bd_apartment import Appartment_BD
 
 class Parser_price:
-    def __init__(self, region ):
+    def __init__(self, region=None ):
         self._domain = 'https://chelyabinsk.n1.ru'
         self._region = region
         self._lst_result = []
@@ -21,24 +22,26 @@ class Parser_price:
 
     def _url_region(self, reg ):
         r_url='-'
-        if reg == 'Калининский':
+        if reg == 'Калининский район':
             r_url = 'Kalininskiy'
-        if reg == 'Курчатовский':
+        if reg == 'Курчатовский район':
             r_url = 'Kurchatovskiy'
-        if reg == 'Ленинский':
+        if reg == 'Ленинский район':
             r_url = 'Leninskiy'
-        if reg == 'Металлургический':
+        if reg == 'Металлургический район':
             r_url = 'Metallurgicheskiy'
-        if reg == 'Советский':
+        if reg == 'Советский район':
             r_url = 'Sovetskiy'
-        if reg == 'Тракторозаводский':
+        if reg == 'Тракторозаводский район':
             r_url = 'Traktorozavodskiy'
-        if reg == 'Центральный':
+        if reg == 'Центральный район':
             r_url = 'Centralnyi'
 
         return r_url
 
-    def data_search(self):
+    def data_search(self, region:str=None):
+        if region:
+            self._region = region
         region_url = self._url_region( self._region )
 
         URL = f'{self._domain}/kupit/kvartiry/vtorichka/district-{region_url}-rayon/'
@@ -160,6 +163,17 @@ class Parser_price:
                 r = d
 
             return r
+
+    def save_bd(self):
+        bd  = Appartment_BD()
+        bd.ini_connect()
+        lst = self.data_search()   # список словарей. элемент списка - запись, словарь - поля записи
+
+        bd.save_record( lst )
+
+
+
+
 
 
 if __name__ == '__main__':
