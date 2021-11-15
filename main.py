@@ -1,9 +1,7 @@
 '''
-Выполнить Light со следующим изменением:
-реализовать страницу определения основных навыков по определенным вакансиям (взаимодействие с hh api).
-Например, на странице представлена форма:
-город, название вакансии, кнопка. По нажатию пользователю будет показана
-средняя ЗП по данной вакансии в этом городе и список релевантных навыков
+Задание Ultra Lite
+1. Создайте во Flask-проекте новую ветку.
+2. Настройте связь проекта с SqLite бд
 '''
 
 from flask import Flask
@@ -16,6 +14,8 @@ from my_lib import get_week
 from parser_price import Parser_price
 #import requests
 from head_hunter_vacancies import HeadHunter_vacancies
+from bd_apartment import Appartment_BD
+
 
 pers = Person()
 
@@ -91,17 +91,50 @@ def hh_vacancy():
     return render_template('hh_vacancy.html', **dic)
 
 
-@app.route("/hh_result/", methods=['POST'] )
-def hh_result():
-    #city = request.form['city']
-    #vac = request.form['vac']
-    #print( city, vac )
-    #dic={}
-    #dic['vacancy'] = vac
-    #dic['city'] = city
-    return render_template('hh_result.html')
+@app.route("/bd_apartment/" )
+def bd_apartment():
+    #region = request.form['region']  # получение параметра
+    # dic = {}
+    # bd = Appartment_BD()
+    # cur = None
+    # con = bd.ini_connect()
+    # dic['isconnect'] = con
+    # dic['field'] = []
+    # if con == 'OK':
+    #     lstField = bd.get_title_table()  # список кортежей(записей) с полями внутри
+    #     dic['field']=lstField
+    #
+    # parser = Parser_price(region)  # создать объект парсинга
+    # parser.save_bd()
 
+    return render_template('bd_apartment.html')
 
+@app.route("/bd_apartment_view/", methods=['POST'] )
+def bd_apartment_view():
+    region = request.form['region']  # получение параметра
+    load  = request.form.get('load')  # получение параметра
+
+    dic = {}
+    bd = Appartment_BD( )
+
+    dic['field'] = []
+    if bd.is_connect == 'OK':
+        lstField = bd.get_title_table()  # список кортежей(записей) с полями внутри
+        dic['field']=lstField
+
+    # данные БД
+    # перезаписать
+    if load:
+        parser = Parser_price( )  # создать объект парсинга по району
+        lst_data = parser.data_search( region )
+        bd.save_data(  lst_data )
+
+    lst_view_data, update = bd.get_data( region )
+    dic['data'] = lst_view_data
+    dic['region'] = region
+    dic['update'] = update
+
+    return render_template('bd_apartment_view.html', **dic)
 
 
 # ********************************************************************
